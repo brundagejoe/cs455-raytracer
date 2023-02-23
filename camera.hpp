@@ -20,7 +20,7 @@ class Camera {
     Vector vertical;
 
    public:
-    Camera(Point3D lookFrom = Point3D(0, 0, 1), Point3D lookAt = Point3D(0, 0, 0), Vector vUp = Vector(0, 1, 0), double vFov = 90, double aspectRatio = 2) : lookFrom(lookFrom), lookAt(lookAt), vUp(vUp), vFov(vFov), aspectRatio(aspectRatio) {
+    Camera(Point3D lookFrom = Point3D(0, 0, 1), Point3D lookAt = Point3D(0, 0, 0), Vector vUp = Vector(0, 1, 0), double vFov = 60, double aspectRatio = 2) : lookFrom(lookFrom), lookAt(lookAt), vUp(vUp), vFov(vFov), aspectRatio(aspectRatio) {
         configureCamera();
     }
 
@@ -50,10 +50,7 @@ class Camera {
         this->vUp = vUp;
         configureCamera();
     }
-    void setVFov(double vFov) {
-        this->vFov = vFov;
-        configureCamera();
-    }
+
     void setAspectRatio(double aspectRatio) {
         this->aspectRatio = aspectRatio;
         configureCamera();

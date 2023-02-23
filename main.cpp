@@ -20,6 +20,10 @@ double randomDouble() {
     return static_cast<double>(rand()) / RAND_MAX;
 }
 
+int randomInt(int min, int max) {
+    return min + static_cast<int>(randomDouble() * (max - min + 1));
+}
+
 double clip(double number, double min, double max) {
     if (number < min) {
         return min;
@@ -31,16 +35,17 @@ double clip(double number, double min, double max) {
 }
 
 int main(int argc, char* argv[]) {
+    srand(0);
     Point3D cameraLookFrom(0, 0, 1);
     Point3D cameraLookAt(0, 0, 0);
 
     parseCommandLine(argc, argv, cameraLookAt, cameraLookFrom);
 
-    const int WIDTH = 1920;
-    const int HEIGHT = 1080;
+    const int WIDTH = 500;
+    const int HEIGHT = 500;
     const double ASPECT_RATIO = static_cast<double>(WIDTH) / HEIGHT;
 
-    const int SAMPLES_PER_PIXEL = 1;
+    const int SAMPLES_PER_PIXEL = 100;
 
     cout << "P3\n";
     cout << WIDTH << " " << HEIGHT << '\n';
@@ -49,22 +54,43 @@ int main(int argc, char* argv[]) {
     Camera camera;
     camera.setAspectRatio(ASPECT_RATIO);
     camera.setLookFrom(cameraLookFrom);
-    camera.setLookAt(Point3D(0, 0, 0));
+    camera.setLookAt(cameraLookAt);
 
     HittableList world;
-    world.addLight(Light(Point3D(1, 1, 1), Color(255, 255, 255), 3));
 
-    shared_ptr<PhongMaterial> whiteMaterial = make_shared<PhongMaterial>(Color(255, 255, 255), 0.1, 0.8, 0.3, 4.0);
-    shared_ptr<PhongMaterial> redMaterial = make_shared<PhongMaterial>(Color(255, 0, 0), 0.3, 0.6, 0.1, 32.0);
-    shared_ptr<PhongMaterial> greenMaterial = make_shared<PhongMaterial>(Color(0, 255, 0), 0.2, 0.7, 0.1, 64.0);
-    shared_ptr<PhongMaterial> blueMaterial = make_shared<PhongMaterial>(Color(0, 0, 255), 0.0, 0.9, 0.1, 16.0);
-
-    world.add(make_shared<Sphere>(Point3D(0.45, 0.0, -0.15), 0.15, whiteMaterial));
-    world.add(make_shared<Sphere>(Point3D(0.0, 0.0, -0.1), 0.2, redMaterial));
-    world.add(make_shared<Sphere>(Point3D(-0.6, 0.0, 0.0), 0.3, greenMaterial));
-    world.add(make_shared<Sphere>(Point3D(0.0, -10000.5, 0.0), 10000.0, blueMaterial));
-
+    // Scene 1
     Color backgroundColor = Color(0.2 * 255, 0.2 * 255, 0.2 * 255);
+    world.addLight(Light(Point3D(0, 1, 0) * 10, Color(255, 255, 255), 1));
+    shared_ptr<PhongMaterial> scene1Material = make_shared<PhongMaterial>(Color(255, 0, 255), 0.2, 0.7, 0.1, 16.0);
+    world.add(make_shared<Sphere>(Point3D(0.0, 0.0, 0.0), 0.4, scene1Material));
+
+    // Scene 2
+    // Color backgroundColor = Color(0.2 * 255, 0.2 * 255, 0.2 * 255);
+    // world.addLight(Light(Point3D(1, 1, 1) * 10, Color(255, 255, 255), 1));
+    // shared_ptr<PhongMaterial> whiteMaterial = make_shared<PhongMaterial>(Color(255, 255, 255), 0.1, 0.8, 0.3, 4.0);
+    // shared_ptr<PhongMaterial> redMaterial = make_shared<PhongMaterial>(Color(255, 0, 0), 0.3, 0.6, 0.1, 32.0);
+    // shared_ptr<PhongMaterial> greenMaterial = make_shared<PhongMaterial>(Color(0, 255, 0), 0.2, 0.7, 0.1, 64.0);
+    // shared_ptr<PhongMaterial> blueMaterial = make_shared<PhongMaterial>(Color(0, 0, 255), 0.0, 0.9, 0.1, 16.0);
+    // world.add(make_shared<Sphere>(Point3D(0.45, 0.0, -0.15), 0.15, whiteMaterial));
+    // world.add(make_shared<Sphere>(Point3D(0.0, 0.0, -0.1), 0.2, redMaterial));
+    // world.add(make_shared<Sphere>(Point3D(-0.6, 0.0, 0.0), 0.3, greenMaterial));
+    // world.add(make_shared<Sphere>(Point3D(0.0, -10000.5, 0.0), 10000.0, blueMaterial));
+
+    // Scene 3
+    // Color backgroundColor = Color(255, 255, 255);
+    // camera.setLookFrom(Point3D(6, 1, 4));
+    // world.addLight(Light(Point3D(1, 1, 1) * 10, Color(255, 255, 255), 1));
+    // shared_ptr<PhongMaterial> whiteMaterial = make_shared<PhongMaterial>(Color(255, 255, 255), 0.1, 0.8, 0.3, 4.0);
+    // shared_ptr<PhongMaterial> grayMaterial = make_shared<PhongMaterial>(Color(150, 150, 150), 0.0, 0.9, 0.1, 16.0);
+    // world.add(make_shared<Sphere>(Point3D(0.0, 0.0, -1), 0.5, whiteMaterial));
+    // world.add(make_shared<Sphere>(Point3D(0.0, -1000.5, 0), 1000, grayMaterial));
+
+    // for (int i = 0; i < 10; ++i) {
+    //     double radius = 0.2;
+    //     Point3D center((i - 5) + (randomDouble() * 0.5), -.3, randomDouble());
+    //     shared_ptr<PhongMaterial> material = make_shared<PhongMaterial>(Color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255)), 0.1, 0.8, 0.3, 4.0);
+    //     world.add(make_shared<Sphere>(center, radius, material));
+    // }
 
     for (int j = HEIGHT - 1; j >= 0; --j) {
         for (int i = 0; i < WIDTH; ++i) {

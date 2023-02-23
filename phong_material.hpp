@@ -13,11 +13,14 @@ class PhongMaterial : public Material {
     double shininess;
 
     Color diffuseColor;
+    Color specularColor;
 
    public:
     PhongMaterial() = default;
     PhongMaterial(Color diffuseColor, double specularCoefficient, double diffuseCoefficient, double ambientCoefficient, double shininess)
-        : specularCoefficient(specularCoefficient), diffuseCoefficient(diffuseCoefficient), ambientCoefficient(ambientCoefficient), shininess(shininess), diffuseColor(diffuseColor) {}
+        : specularCoefficient(specularCoefficient), diffuseCoefficient(diffuseCoefficient), ambientCoefficient(ambientCoefficient), shininess(shininess), diffuseColor(diffuseColor) {
+        specularColor = Color(255, 255, 255);
+    }
 
     virtual ~PhongMaterial() = default;
 
@@ -27,14 +30,14 @@ class PhongMaterial : public Material {
 Color PhongMaterial::getColor(const HitRecord& hitRecord, const Light& light, bool inShadow, const Ray& viewRay) const {
     double ambientIntensity = 0.1;
 
-    double lightIntensity = inShadow ? 0 : light.getIntensity() / (light.getPosition() - hitRecord.point).lengthSquared();
+    double lightIntensity = inShadow ? 0 : light.getIntensity();
 
     Vector L = normalize(light.getPosition() - hitRecord.point);
     Vector N = hitRecord.normal;
     Vector R = normalize(2 * dot(L, N) * N - L);
     Vector V = normalize(viewRay.getOrigin() - hitRecord.point);
 
-    Vector color = ambientIntensity * ambientCoefficient * diffuseColor + lightIntensity * diffuseCoefficient * dot(L, N) * diffuseColor + lightIntensity * specularCoefficient * pow(dot(R, V), shininess) * light.getColor();
+    Vector color = ambientIntensity * ambientCoefficient * diffuseColor + lightIntensity * diffuseCoefficient * dot(L, N) * diffuseColor + lightIntensity * specularCoefficient * pow(dot(R, V), shininess) * specularColor;
     return color;
 }
 

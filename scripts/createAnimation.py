@@ -25,9 +25,9 @@ else:
 
 
 frame_rate = 24
-total_seconds = 3
-y_values = createValues(0, 1, 24 * total_seconds)
-z_values = createValues(10, 1, 24 * total_seconds)
+total_seconds = 10
+y_values = createValues(0, 10, 24 * total_seconds)
+z_values = createValues(20, 1, 24 * total_seconds)
 
 # for index, xVal in enumerate(values):
 for i in range(frame_rate * total_seconds):
