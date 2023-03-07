@@ -56,6 +56,11 @@ class Camera {
         configureCamera();
     }
 
+    void setVFov(double vFov) {
+        this->vFov = vFov;
+        configureCamera();
+    }
+
     Ray getRay(double u, double v) const {
         if (u < 0 || u > 1 || v < 0 || v > 1) {
             throw std::invalid_argument("u and v must be in range [0,1]");

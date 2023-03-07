@@ -26,6 +26,9 @@ Color phongRayColor(const Ray& ray, const HittableList& world, int depth) {
     if (world.hit(ray, hitRecord)) {
         Color returnColor;
         std::shared_ptr<PhongMaterial> phongMaterial = std::dynamic_pointer_cast<PhongMaterial>(hitRecord.material);
+        if (std::dynamic_pointer_cast<PhongMaterial>(hitRecord.material) == nullptr) {
+            phongMaterial = std::make_shared<PhongMaterial>(hitRecord.material->getColor());
+        }
 
         Color ambientColor = phongMaterial->getColor() * phongMaterial->getAmbientCoefficient() * ambientLightColor;
 
@@ -70,7 +73,9 @@ Color rayColor(const Ray& ray, const HittableList& world, int depth) {
 }
 
 int main() {
-    srand(0);
+    srand(time(NULL));
+
+    time_t start = time(0);
 
     int WIDTH = 500;
     int HEIGHT = 500;
@@ -81,44 +86,46 @@ int main() {
 
     HittableList world;
 
-    switch (0) {
+    Camera camera;
+    Point3D cameraLookFrom(0, 0, 1);
+    Point3D cameraLookAt(0, 0, 0);
+
+    switch (4) {
         case 1:
-            world = scene1();
+            world = proj6Scene1();
             SAMPLES_PER_PIXEL = 100;
             MAX_DEPTH = 50;
             USE_PHONG = true;
             break;
         case 2:
-            world = scene2();
+            world = proj6Scene2();
             SAMPLES_PER_PIXEL = 100;
             MAX_DEPTH = 50;
             USE_PHONG = true;
             break;
         case 3:
             // Takes about 10 minutes to render
-            world = cornellBox();
+            world = proj6Scene3();
             SAMPLES_PER_PIXEL = 1000;
             MAX_DEPTH = 100;
             USE_PHONG = false;
             break;
         case 4:
-            world = phongCornellBox();
+            world = cornellMetalBalls();
             SAMPLES_PER_PIXEL = 10;
-            MAX_DEPTH = 5;
-            USE_PHONG = true;
+            MAX_DEPTH = 50;
+            USE_PHONG = false;
+            cameraLookFrom = Point3D(278, 273, 800);
+            cameraLookAt = Point3D(Vector(cameraLookFrom) - Vector(0, 0, 1));
+            camera.setVFov(35);
             break;
         default:
-            world = scene1();
+            world = proj6Scene1();
             SAMPLES_PER_PIXEL = 100;
             MAX_DEPTH = 50;
             USE_PHONG = true;
             break;
     }
-
-    Camera camera;
-
-    Point3D cameraLookFrom(0, 0, 1);
-    Point3D cameraLookAt(0, 0, 0);
 
     const double ASPECT_RATIO = static_cast<double>(WIDTH) / HEIGHT;
     camera.setAspectRatio(ASPECT_RATIO);
@@ -158,7 +165,9 @@ int main() {
         std::cerr << "\rScanlines remaining: " << j << ' ';
     }
 
-    std::cerr << "\nDone.\n";
+    time_t end = time(0);
+
+    std::cerr << "\nDone. Time elapsed: " << getTimeInMinutes(start, end) << '\n';
 
     return 0;
 }

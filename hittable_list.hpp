@@ -23,8 +23,8 @@ class HittableList : public Hittable {
 
     void add(std::shared_ptr<Hittable> object) { objects.push_back(object); }
     void addLight(Light light) { this->light = light; }
-    void addAmbientLight(Color ambientLightColor) { this->ambientLightColor = ambientLightColor; }
-    void addDirectionalLight(Color directionalLightColor, Vector directionalLightDirection) {
+    void setAmbientLight(Color ambientLightColor) { this->ambientLightColor = ambientLightColor; }
+    void setDirectionalLight(Color directionalLightColor, Vector directionalLightDirection) {
         this->directionalLightColor = directionalLightColor;
         this->directionalLightDirection = directionalLightDirection;
     }

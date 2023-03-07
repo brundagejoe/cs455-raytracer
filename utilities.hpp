@@ -24,4 +24,15 @@ inline double clip(double number, double min, double max) {
         return number;
     }
 }
+
+inline std::string getTimeInMinutes(time_t start, time_t end) {
+    double timeInSeconds = difftime(end, start);
+    double timeInMinutes = timeInSeconds / 60;
+
+    int minutes = static_cast<int>(timeInMinutes);
+    int seconds = static_cast<int>(timeInSeconds - minutes * 60);
+
+    std::string timeString = std::to_string(minutes) + 'm' + std::to_string(seconds) + 's';
+    return timeString;
+}
 #endif  // !UTILITIES_HPP

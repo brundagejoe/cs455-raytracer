@@ -49,7 +49,7 @@ bool Triangle::hit(const Ray& ray, HitRecord& hitRecord) const {
 
     if (t > 0.00001) {
         hitRecord.point = ray.at(t);
-        hitRecord.normal = normalize(cross(edge1, edge2));
+        hitRecord.setFaceNormal(ray, normalize(cross(edge1, edge2)));
         hitRecord.distanceFromOrigin = t;
         hitRecord.material = getMaterial();
         return true;
