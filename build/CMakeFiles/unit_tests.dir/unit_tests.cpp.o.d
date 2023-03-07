@@ -472,15 +472,16 @@ CMakeFiles/unit_tests.dir/unit_tests.cpp.o: \
   /Users/joebrundage/Documents/joe/cs455/raytracer/camera.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/point3d.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/triplet.hpp \
-  /Users/joebrundage/Documents/joe/cs455/raytracer/vector.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cmath \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/math.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/usr/include/math.h \
+  /Users/joebrundage/Documents/joe/cs455/raytracer/vector.hpp \
+  /Users/joebrundage/Documents/joe/cs455/raytracer/utilities.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/ray.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/color.hpp \
-  /Users/joebrundage/Documents/joe/cs455/raytracer/sphere.hpp \
+  /Users/joebrundage/Documents/joe/cs455/raytracer/phong_material.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/hittable.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/hit_record.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/material.hpp \
   /Users/joebrundage/Documents/joe/cs455/raytracer/light.hpp \
-  /Users/joebrundage/Documents/joe/cs455/raytracer/phong_material.hpp
+  /Users/joebrundage/Documents/joe/cs455/raytracer/sphere.hpp

@@ -1,0 +1,5 @@
+.vscode/
+build/
+googletest/
+raytracer/image.ppm
+raytracer/raytracer
