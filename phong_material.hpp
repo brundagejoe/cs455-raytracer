@@ -11,20 +11,38 @@ class PhongMaterial : public Material {
     double diffuseCoefficient;
     double ambientCoefficient;
     double shininess;
+    double reflectance;
 
     Color diffuseColor;
     Color specularColor;
 
    public:
     PhongMaterial() = default;
-    PhongMaterial(Color diffuseColor, double specularCoefficient, double diffuseCoefficient, double ambientCoefficient, double shininess)
-        : specularCoefficient(specularCoefficient), diffuseCoefficient(diffuseCoefficient), ambientCoefficient(ambientCoefficient), shininess(shininess), diffuseColor(diffuseColor) {
-        specularColor = Color(255, 255, 255);
-    }
+    PhongMaterial(Color diffuseColor) : PhongMaterial(0.7, 0.1, 0.2, diffuseColor, Color(1, 1, 1), 32, 0) {}
+    PhongMaterial(double diffuseCoefficient, double specularCoefficient, double ambientCoefficient, Color diffuseColor, Color specularColor, double shininess, double reflectance)
+        : specularCoefficient(specularCoefficient), diffuseCoefficient(diffuseCoefficient), ambientCoefficient(ambientCoefficient), shininess(shininess), reflectance(reflectance), diffuseColor(diffuseColor), specularColor(specularColor) {}
 
     virtual ~PhongMaterial() = default;
 
-    virtual Color getColor(const HitRecord& hitRecord, const Light& light, bool inShadow, const Ray& viewRay) const override;
+    Color getColor(const HitRecord& hitRecord, const Light& light, bool inShadow, const Ray& viewRay) const;
+    virtual Color getColor() const override { return diffuseColor; }
+    virtual bool scatter(const Ray& ray, const HitRecord& hitRecord, Color& attenuation, Ray& scatteredRay) const override {
+        UNUSED(ray);
+        UNUSED(hitRecord);
+
+        attenuation = diffuseColor;
+        scatteredRay = Ray(hitRecord.point, hitRecord.normal + randomInUnitSphere());
+
+        return true;
+    }
+
+    double getSpecularCoefficient() const { return specularCoefficient; }
+    double getDiffuseCoefficient() const { return diffuseCoefficient; }
+    double getAmbientCoefficient() const { return ambientCoefficient; }
+    double getShininess() const { return shininess; }
+    double getReflectance() const { return reflectance; }
+
+    Color getSpecularColor() const { return specularColor; }
 };
 
 Color PhongMaterial::getColor(const HitRecord& hitRecord, const Light& light, bool inShadow, const Ray& viewRay) const {

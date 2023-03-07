@@ -4,7 +4,6 @@
 #include "color.hpp"
 #include "hittable.hpp"
 #include "material.hpp"
-#include "phong_material.hpp"
 #include "point3d.hpp"
 
 #ifndef SPHERE_HPP
@@ -16,7 +15,7 @@ class Sphere : public Hittable {
     double radius;
 
    public:
-    Sphere(const Point3D& center, double radius, std::shared_ptr<PhongMaterial> material = std::make_shared<PhongMaterial>(Color(255, 255, 255), 0.5, 0.5, 0.5, 10)) : Hittable(material), center(center), radius(radius) {}
+    Sphere(const Point3D& center, double radius, std::shared_ptr<Material> material) : Hittable(material), center(center), radius(radius) {}
     Sphere() = default;
     virtual ~Sphere() = default;
 
@@ -45,8 +44,11 @@ class Sphere : public Hittable {
         }
 
         hitRecord.point = ray.at(root);
-        hitRecord.normal = getNormal(hitRecord.point);
         hitRecord.distanceFromOrigin = root;
+        hitRecord.material = getMaterial();
+
+        Vector outwardNormal = (hitRecord.point - center) / radius;
+        hitRecord.setFaceNormal(ray, outwardNormal);
         return true;
     }
 

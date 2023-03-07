@@ -1,12 +1,17 @@
 #include <gtest/gtest.h>
 
+#include <cstdlib>
+
 #include "camera.hpp"
 #include "color.hpp"
+#include "phong_material.hpp"
 #include "point3d.hpp"
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "triplet.hpp"
 #include "vector.hpp"
+
+std::shared_ptr<PhongMaterial> MATERIAL = std::make_shared<PhongMaterial>();
 
 TEST(TripletTest, EquivalencyTest) {
     Triplet a(1, 2, 3);
@@ -103,6 +108,13 @@ TEST(ColorTest, ColorDivisionTest) {
     EXPECT_EQ(ss.str(), "5 5 5");
 }
 
+TEST(ColorTest, ColorMultiplicationTest) {
+    Color a = Color(0.5, 0.5, 0.5);
+    Color b = Color(0.25, 0.25, 0.25);
+
+    EXPECT_EQ(a * b, Color(0.125, 0.125, 0.125));
+}
+
 TEST(VectorTest, LengthTest) {
     Vector a(1, 2, 3);
     EXPECT_EQ(a.length(), sqrt(14));
@@ -170,14 +182,14 @@ TEST(RayTest, AtTest) {
 }
 
 TEST(SphereTest, GetTest) {
-    Sphere a(Point3D(1, 2, 3), 4);
+    Sphere a(Point3D(1, 2, 3), 4, MATERIAL);
     EXPECT_EQ(a.getCenter(), Point3D(1, 2, 3));
     EXPECT_EQ(a.getRadius(), 4);
 }
 
 TEST(SphereTest, HitTest) {
     HitRecord hitRecord;
-    Sphere a(Point3D(1, 2, 3), 4);
+    Sphere a(Point3D(1, 2, 3), 4, MATERIAL);
     Ray b(Point3D(0, 0, 0), Vector(1, 1, 1));
     EXPECT_EQ(a.hit(b, hitRecord), true);
 }

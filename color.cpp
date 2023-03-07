@@ -3,7 +3,7 @@
 #include <iostream>
 
 Color interpolateColor(const Color& a, const Color& b, const double t) {
-        return a * (1 - t) + b * t;
+    return a * (1 - t) + b * t;
 }
 
 std::ostream& operator<<(std::ostream& os, const Color& obj) {
