@@ -5,6 +5,8 @@
 #include "hittable.hpp"
 #include "light.hpp"
 
+#define UNUSED(x) (void)(x)
+
 struct HitRecord;
 
 class Material {
@@ -12,7 +14,9 @@ class Material {
     Material() = default;
     ~Material() = default;
 
-    virtual Color getColor(const HitRecord& hitRecord, const Light& light, bool inShadow, const Ray& viewRay) const = 0;
+    virtual Color getColor() const = 0;
+    virtual bool scatter(const Ray& ray, const HitRecord& hitRecord, Color& attenuation, Ray& scatteredRay) const = 0;
+    virtual Color emission() const { return Color(0, 0, 0); }
 };
 
 #endif  // MATERIAL_HPP

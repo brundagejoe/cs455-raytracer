@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 
 #ifndef TRIPLET_HPP
@@ -74,6 +75,13 @@ class Triplet {
         return *this;
     }
 
+    Triplet operator*=(const Triplet& rhs) {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        return *this;
+    }
+
     Triplet operator/=(const double i) {
         x /= i;
         y /= i;
@@ -135,6 +143,11 @@ inline Triplet operator*(const double lhs, Triplet rhs) {
     return rhs;
 }
 
+inline Triplet operator*(Triplet lhs, const Triplet& rhs) {
+    lhs *= rhs;
+    return lhs;
+}
+
 inline Triplet operator/(Triplet lhs, const double rhs) {
     lhs /= rhs;
     return lhs;
@@ -146,6 +159,15 @@ inline Triplet operator/(const double lhs, Triplet rhs) {
 
 inline Triplet abs(const Triplet& t) {
     return Triplet(std::abs(t.getX()), std::abs(t.getY()), std::abs(t.getZ()));
+}
+
+inline Triplet sqrt(const Triplet& t) {
+    return Triplet(std::sqrt(t.getX()), std::sqrt(t.getY()), std::sqrt(t.getZ()));
+}
+
+inline bool nearZero(const Triplet& t) {
+    const double s = 1e-8;
+    return (std::abs(t.getX()) < s) && (std::abs(t.getY()) < s) && (std::abs(t.getZ()) < s);
 }
 
 #endif  // TRIPLET_HPP

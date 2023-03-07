@@ -20,6 +20,7 @@ class Hittable {
     void setMaterial(std::shared_ptr<Material> material) {
         this->material = material;
     }
+
     std::shared_ptr<Material> getMaterial() const {
         return material;
     }
