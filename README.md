@@ -4,6 +4,12 @@ Raytracer for CS 455. Includes unit tests and sampling. Has a phong shading algo
 
 ## Images produced by this raytracer
 
-![scene1](raytracer/scene1.jpg)
-![scene2](raytracer/scene2.jpg)
-![scene3](raytracer/scene3.jpg)
+### Phong Shading
+
+![scene1](raytracer/example_images/scene1.jpg)
+![scene2](raytracer/example_images/scene2.jpg)
+![phong_cornell](raytracer/example_images/phong_cornell.jpg)
+
+### Realistic Shading
+
+![scene3](raytracer/example_images/scene3.jpg)

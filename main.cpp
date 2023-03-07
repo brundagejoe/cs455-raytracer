@@ -81,7 +81,7 @@ int main() {
 
     HittableList world;
 
-    switch (0) {
+    switch (4) {
         case 1:
             world = scene1();
             SAMPLES_PER_PIXEL = 100;

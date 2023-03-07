@@ -3,6 +3,8 @@ make:
 test:
 	cd build && make
 	./build/unit_tests
+clean:
+	rm raytracer/raytracer && rm raytracer/*.ppm && rm raytracer/*.jpg
 image:
 	make && ./raytracer/raytracer > raytracer/image.ppm && open raytracer/image.ppm
 jpg:
