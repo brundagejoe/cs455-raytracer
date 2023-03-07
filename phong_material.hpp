@@ -18,7 +18,7 @@ class PhongMaterial : public Material {
 
    public:
     PhongMaterial() = default;
-    PhongMaterial(Color diffuseColor) : PhongMaterial(0.7, 0.1, 0.2, diffuseColor, Color(1, 1, 1), 32, 0) {}
+    PhongMaterial(Color diffuseColor) : PhongMaterial(0.8, 0.8, 0.1, diffuseColor, Color(1, 1, 1), 32, 0) {}
     PhongMaterial(double diffuseCoefficient, double specularCoefficient, double ambientCoefficient, Color diffuseColor, Color specularColor, double shininess, double reflectance)
         : specularCoefficient(specularCoefficient), diffuseCoefficient(diffuseCoefficient), ambientCoefficient(ambientCoefficient), shininess(shininess), reflectance(reflectance), diffuseColor(diffuseColor), specularColor(specularColor) {}
 

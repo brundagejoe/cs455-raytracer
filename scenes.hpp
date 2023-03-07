@@ -152,8 +152,9 @@ HittableList cornellBox() {
 
 HittableList cornellMetalBalls() {
     HittableList world = cornellBox();
-    auto metal = make_shared<Metal>(Color(0.8, 0.8, 0.9), 0.1);
+    auto metal = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.1);
     auto gold = make_shared<Metal>(Color(0.8, 0.8, 0.3), 0.5);
+
     world.add(make_shared<Sphere>(Point3D(160, 90, -150), 90, metal));
     world.add(make_shared<Sphere>(Point3D(360, 150, -370), 150, gold));
     return world;
