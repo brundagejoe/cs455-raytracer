@@ -5,3 +5,5 @@ test:
 	./build/unit_tests
 image:
 	make && ./raytracer/raytracer > raytracer/image.ppm && open raytracer/image.ppm
+jpg:
+	make && ./raytracer/raytracer > raytracer/image.ppm && ffmpeg -i raytracer/image.ppm raytracer/image.jpg && rm raytracer/image.ppm && open raytracer/image.jpg
