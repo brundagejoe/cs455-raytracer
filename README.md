@@ -4,12 +4,12 @@ Raytracer for CS 455. Includes unit tests and sampling. Has a phong shading algo
 
 ## Images produced by this raytracer
 
-### Phong Shading
+### Recursive raytracing algorithm
 
 ![scene1](raytracer/example_images/scene1.jpg)
 ![scene2](raytracer/example_images/scene2.jpg)
 ![phong_cornell](raytracer/example_images/phong_cornell_spheres.jpg)
 
-### Realistic Shading
+### Brute-force path tracing algorithm
 
 ![scene3](raytracer/example_images/cornell_spheres.jpg)
