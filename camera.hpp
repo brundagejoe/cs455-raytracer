@@ -14,13 +14,16 @@ class Camera {
     Vector vUp;
     double vFov;
     double aspectRatio;
+    double aperature;
 
     Point3D lowerLeftCorner;
     Vector horizontal;
     Vector vertical;
+    Vector u, v, w;
+    double lensRadius;
 
    public:
-    Camera(Point3D lookFrom = Point3D(0, 0, 1), Point3D lookAt = Point3D(0, 0, 0), Vector vUp = Vector(0, 1, 0), double vFov = 60, double aspectRatio = 2) : lookFrom(lookFrom), lookAt(lookAt), vUp(vUp), vFov(vFov), aspectRatio(aspectRatio) {
+    Camera(Point3D lookFrom = Point3D(0, 0, 1), Point3D lookAt = Point3D(0, 0, 0), Vector vUp = Vector(0, 1, 0), double vFov = 60, double aspectRatio = 2, double aperature = 0) : lookFrom(lookFrom), lookAt(lookAt), vUp(vUp), vFov(vFov), aspectRatio(aspectRatio), aperature(aperature) {
         configureCamera();
     }
 
@@ -29,13 +32,17 @@ class Camera {
         double halfHeight = tan(theta / 2);
         double halfWidth = aspectRatio * halfHeight;
 
-        Vector w = normalize(lookFrom - lookAt);
-        Vector u = normalize(cross(vUp, w));
-        Vector v = cross(w, u);
+        w = normalize(lookFrom - lookAt);
+        u = normalize(cross(vUp, w));
+        v = cross(w, u);
 
-        lowerLeftCorner = static_cast<Vector>(lookFrom) - halfWidth * u - halfHeight * v - w;
-        horizontal = 2 * halfWidth * u;
-        vertical = 2 * halfHeight * v;
+        double focusDistance = length(lookFrom - lookAt);
+
+        horizontal = 2 * halfWidth * u * focusDistance;
+        vertical = 2 * halfHeight * v * focusDistance;
+        lowerLeftCorner = static_cast<Vector>(lookFrom) - horizontal / 2 - vertical / 2 - w * focusDistance;
+
+        lensRadius = aperature / 2;
     }
 
     void setLookFrom(Point3D lookFrom) {
@@ -61,11 +68,20 @@ class Camera {
         configureCamera();
     }
 
-    Ray getRay(double u, double v) const {
-        if (u < 0 || u > 1 || v < 0 || v > 1) {
+    void setAperature(double aperature) {
+        this->aperature = aperature;
+        configureCamera();
+    }
+
+    Ray getRay(double s, double t) const {
+        if (s < 0 || s > 1 || t < 0 || t > 1) {
             throw std::invalid_argument("u and v must be in range [0,1]");
         }
-        return Ray(lookFrom, lowerLeftCorner + u * horizontal + v * vertical - static_cast<Vector>(lookFrom));
+
+        Vector randomDisk = lensRadius * randomInUnitDisk();
+        Vector offset = u * randomDisk.getX() + v * randomDisk.getY();
+
+        return Ray(lookFrom + offset, lowerLeftCorner + s * horizontal + t * vertical - static_cast<Vector>(lookFrom) - offset);
     }
 };
 

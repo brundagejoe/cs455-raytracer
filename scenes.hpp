@@ -160,4 +160,20 @@ HittableList cornellMetalBalls() {
     return world;
 }
 
+HittableList simpleSpheresForFocusTesting() {
+    HittableList world;
+    auto grey = make_shared<Lambertian>(Color(0.8, 0.8, 0.8));
+    auto red = make_shared<Lambertian>(Color(0.65, 0.05, 0.05));
+    auto green = make_shared<Lambertian>(Color(0.12, 0.45, 0.15));
+    auto blue = make_shared<Lambertian>(Color(0.05, 0.05, 0.65));
+    auto light = make_shared<Emission>(Color(10, 10, 10));
+
+    world.add(make_shared<Quadrilateral>(Point3D(-5, -1, -5), Point3D(-5, -1, 5), Point3D(5, -1, 5), Point3D(5, -1, -5), grey));
+    world.add(make_shared<Sphere>(Point3D(0, -.8, 0), 0.2, light));
+    world.add(make_shared<Sphere>(Point3D(-0.42, -.8, 0), 0.2, red));
+    world.add(make_shared<Sphere>(Point3D(0.42, -.8, 0), 0.2, blue));
+
+    return world;
+}
+
 #endif  // !SCENES_HPP

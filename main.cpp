@@ -13,7 +13,7 @@
 #include "triplet.hpp"
 #include "utilities.hpp"
 
-Color phongRayColor(const Ray& ray, const HittableList& world, int depth) {
+Color whittedAlgorithmRayColor(const Ray& ray, const HittableList& world, int depth) {
     Vector directionToLight = world.getDirectionalLightDirection();
     Color directionLightColor = world.getDirectionalLightColor();
     Color ambientLightColor = world.getAmbientLightColor();
@@ -46,7 +46,7 @@ Color phongRayColor(const Ray& ray, const HittableList& world, int depth) {
         }
 
         Ray reflectRay(hitRecord.point, reflectRayDirection);
-        reflectionColor = phongRayColor(reflectRay, world, depth - 1) * phongMaterial->getReflectance();
+        reflectionColor = whittedAlgorithmRayColor(reflectRay, world, depth - 1) * phongMaterial->getReflectance();
 
         returnColor = ambientColor + diffuseColor + specularColor + reflectionColor;
 
@@ -55,7 +55,7 @@ Color phongRayColor(const Ray& ray, const HittableList& world, int depth) {
     return backgroundColor;
 }
 
-Color rayColor(const Ray& ray, const HittableList& world, int depth) {
+Color brutePathTracingAlgorithmRayColor(const Ray& ray, const HittableList& world, int depth) {
     if (depth <= 0) {
         return Color(0, 0, 0);
     }
@@ -65,7 +65,7 @@ Color rayColor(const Ray& ray, const HittableList& world, int depth) {
         Color attenuation;
 
         if (hitRecord.material->scatter(ray, hitRecord, attenuation, scatteredRay)) {
-            return hitRecord.material->emission() + attenuation * rayColor(scatteredRay, world, depth - 1);
+            return hitRecord.material->emission() + attenuation * brutePathTracingAlgorithmRayColor(scatteredRay, world, depth - 1);
         }
         return hitRecord.material->emission();
     }
@@ -82,7 +82,7 @@ int main() {
 
     int SAMPLES_PER_PIXEL;
     int MAX_DEPTH;
-    bool USE_PHONG;
+    bool USE_WHITTED;
 
     HittableList world;
 
@@ -90,40 +90,49 @@ int main() {
     Point3D cameraLookFrom(0, 0, 1);
     Point3D cameraLookAt(0, 0, 0);
 
-    switch (4) {
+    switch (1) {
         case 1:
             world = proj6Scene1();
             SAMPLES_PER_PIXEL = 100;
             MAX_DEPTH = 50;
-            USE_PHONG = true;
+            USE_WHITTED = true;
             break;
         case 2:
             world = proj6Scene2();
             SAMPLES_PER_PIXEL = 100;
             MAX_DEPTH = 50;
-            USE_PHONG = true;
+            USE_WHITTED = true;
             break;
         case 3:
             // Takes about 10 minutes to render
             world = proj6Scene3();
             SAMPLES_PER_PIXEL = 1000;
             MAX_DEPTH = 100;
-            USE_PHONG = false;
+            USE_WHITTED = false;
             break;
         case 4:
             world = cornellMetalBalls();
             SAMPLES_PER_PIXEL = 10;
             MAX_DEPTH = 50;
-            USE_PHONG = false;
+            USE_WHITTED = false;
             cameraLookFrom = Point3D(278, 273, 800);
             cameraLookAt = Point3D(Vector(cameraLookFrom) - Vector(0, 0, 1));
             camera.setVFov(35);
+            break;
+        case 5:
+            world = simpleSpheresForFocusTesting();
+            SAMPLES_PER_PIXEL = 200;
+            MAX_DEPTH = 50;
+            USE_WHITTED = false;
+            cameraLookFrom = Point3D(0.5, -0.3, 0.6);
+            cameraLookAt = Point3D(0, -.8, 0);
+            camera.setAperature(0.2);
             break;
         default:
             world = proj6Scene1();
             SAMPLES_PER_PIXEL = 100;
             MAX_DEPTH = 50;
-            USE_PHONG = true;
+            USE_WHITTED = true;
             break;
     }
 
@@ -149,12 +158,12 @@ int main() {
                     u = clip((i + randomDouble()) / (WIDTH - 1), 0.0, 1.0);
                     v = clip((j + randomDouble()) / (HEIGHT - 1), 0.0, 1.0);
                 }
-                USE_PHONG ? outputColor += phongRayColor(camera.getRay(u, v), world, MAX_DEPTH)
-                          : outputColor += rayColor(camera.getRay(u, v), world, MAX_DEPTH);
+                USE_WHITTED ? outputColor += whittedAlgorithmRayColor(camera.getRay(u, v), world, MAX_DEPTH)
+                            : outputColor += brutePathTracingAlgorithmRayColor(camera.getRay(u, v), world, MAX_DEPTH);
             }
 
             outputColor *= 255;
-            if (USE_PHONG) {
+            if (USE_WHITTED) {
                 outputColor /= SAMPLES_PER_PIXEL;
             } else {
                 // gamma 2 correction (sqrt)
